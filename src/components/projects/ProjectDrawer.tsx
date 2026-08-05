@@ -2,6 +2,7 @@ import { ArrowUpRight, X } from "lucide-react";
 import { useEffect } from "react";
 import type { Project } from "@/data/projects";
 import { track } from "@/lib/analytics";
+import { toTitleCase } from "@/lib/utils";
 import { StatusBadge } from "./StatusBadge";
 
 type Props = {
@@ -37,7 +38,7 @@ export function ProjectDrawer({ project, districtLabel, onClose }: Props) {
           <div>
             <p className="eyebrow">{districtLabel}</p>
             <h3 className="mt-2 text-xl leading-snug font-semibold text-foreground">
-              {project.projectName}
+              {toTitleCase(project.projectName)}
             </h3>
           </div>
           <button
@@ -53,9 +54,9 @@ export function ProjectDrawer({ project, districtLabel, onClose }: Props) {
           <StatusBadge status={project.status} />
 
           <dl className="space-y-5">
-            <Row label="Client" value={project.client} />
+            <Row label="Client" value={toTitleCase(project.client)} />
             <Row label="District" value={districtLabel} />
-            <Row label="City / Village" value={project.locality} />
+            <Row label="City / Village" value={toTitleCase(project.locality)} />
             <Row label="Services" value={project.services.join(" · ")} />
             <Row
               label={project.status === "Completed" ? "Completion" : "Target completion"}

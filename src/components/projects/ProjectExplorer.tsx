@@ -11,7 +11,7 @@ import {
   type StateSlug,
 } from "@/data/projects";
 import { track } from "@/lib/analytics";
-import { cn } from "@/lib/utils";
+import { cn, toTitleCase } from "@/lib/utils";
 import { DistrictMap } from "./DistrictMap";
 import { ProjectDrawer } from "./ProjectDrawer";
 import { StatusBadge } from "./StatusBadge";
@@ -101,9 +101,20 @@ export function ProjectExplorer() {
               stateName={active.name}
             />
           </div>
-          <p className="mt-2 text-center text-xs font-medium text-muted-foreground shrink-0">
-            Click or tap a district on the map to view list of projects
-          </p>
+          <div className="mt-2.5 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs font-semibold text-foreground shrink-0 py-0.5">
+            <div className="flex items-center gap-1.5">
+              <span className="size-2.5 rounded-full bg-[#dc2626] shrink-0 shadow-2xs" />
+              <span>Selected / Hovered</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="size-2.5 rounded-full bg-[#336699] shrink-0 shadow-2xs" />
+              <span>Has Projects</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="size-2.5 rounded-full bg-[#eff6ff] border border-[#bfdbfe] shrink-0" />
+              <span className="text-muted-foreground">No Projects</span>
+            </div>
+          </div>
         </div>
 
         <div className="h-[620px] sm:h-[680px] lg:h-[720px] flex flex-col">
@@ -172,12 +183,14 @@ export function ProjectExplorer() {
                     >
                       <div className="flex items-start justify-between gap-2">
                         <h4 className="text-sm sm:text-base font-bold leading-snug text-foreground">
-                          {p.projectName}
+                          {toTitleCase(p.projectName)}
                         </h4>
                       </div>
                       <p className="mt-1 text-xs text-body">
-                        <span className="font-medium text-foreground/90">{p.client}</span> ·{" "}
-                        {p.locality}
+                        <span className="font-medium text-foreground/90">
+                          {toTitleCase(p.client)}
+                        </span>{" "}
+                        · {toTitleCase(p.locality)}
                       </p>
                       <p className="mt-1 text-[11px] text-muted-foreground">
                         Services: {p.services.join(", ")}

@@ -199,7 +199,9 @@ export function DistrictMap({
             const count = counts[d.name] ?? 0;
             const isSelected = selected === d.name;
             const isHovered = hovered === d.name;
+            const isHyderabad = d.name.toLowerCase() === "hyderabad";
             const hasProjects = count > 0;
+            const isRed = isHovered || isSelected || isHyderabad;
 
             return (
               <path
@@ -226,13 +228,11 @@ export function DistrictMap({
                 }}
                 className={cn(
                   "cursor-pointer outline-none transition-all duration-200 ease-out",
-                  isSelected
-                    ? "fill-[#dc2626] stroke-[#b91c1c] stroke-[2.5]"
-                    : isHovered
-                      ? "fill-[#fecdd3] stroke-[#e11d48] stroke-[2]"
-                      : hasProjects
-                        ? "fill-[#dbeafe] stroke-[#3b82f6] stroke-[1.6] hover:fill-[#bfdbfe]"
-                        : "fill-[#f8fafc] stroke-[#cbd5e1] stroke-[1] hover:fill-[#e2e8f0]",
+                  isRed
+                    ? "fill-[#dc2626] stroke-[#991b1b] stroke-[2.2]"
+                    : hasProjects
+                      ? "fill-[#336699cc] stroke-[#1e3a5f] stroke-[1.4] hover:fill-[#dc2626] hover:stroke-[#991b1b]"
+                      : "fill-[#eff6ff] stroke-[#bfdbfe] stroke-[1] hover:fill-[#dc2626] hover:stroke-[#991b1b]",
                 )}
               />
             );
@@ -264,10 +264,12 @@ export function DistrictMap({
           {geo.districts.map((d) => {
             const isSelected = selected === d.name;
             const isHovered = hovered === d.name;
+            const isHyderabad = d.name.toLowerCase() === "hyderabad";
+            const isRed = isHovered || isSelected || isHyderabad;
             const labelText = labelFor(d.name);
 
-            // Show label if district is selected, hovered, or fits comfortably
-            const shouldShowLabel = isSelected || isHovered || d.w > 45;
+            // Show label if district is red or fits comfortably
+            const shouldShowLabel = isRed || d.w > 45;
 
             if (!shouldShowLabel) return null;
 
@@ -279,16 +281,12 @@ export function DistrictMap({
                   textAnchor="middle"
                   dominantBaseline="central"
                   paintOrder="stroke fill"
-                  stroke={isSelected ? "#821111" : "#ffffff"}
-                  strokeWidth={isSelected ? "2.5" : "3.5"}
+                  stroke={isRed ? "#7f1d1d" : "#ffffff"}
+                  strokeWidth={isRed ? "2.5" : "3.5"}
                   strokeLinejoin="round"
                   className={cn(
-                    "text-[11px] font-bold tracking-tight transition-all duration-150",
-                    isSelected
-                      ? "fill-[#ffffff] text-[12px]"
-                      : isHovered
-                        ? "fill-[#0369a1] text-[12px]"
-                        : "fill-[#1e293b]",
+                    "text-[11px] font-extrabold tracking-tight transition-all duration-150",
+                    isRed ? "fill-[#ffffff] text-[12px]" : "fill-[#0f172a]",
                   )}
                 >
                   {labelText}

@@ -1,0 +1,6 @@
+{
+  "name": "Leenus India Projects",
+  "description": "Interactive infrastructure projects explorer across Andhra Pradesh and Telangana delivered by Leenus India.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

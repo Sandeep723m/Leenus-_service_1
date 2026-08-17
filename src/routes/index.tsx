@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import heroImage from "@/assets/projects-hero.jpg";
+import logoImage from "@/assets/logo.png";
 import { ProjectExplorer } from "@/components/projects/ProjectExplorer";
 import { ScrollingLogos } from "@/components/projects/ScrollingLogos";
 import { track } from "@/lib/analytics";
@@ -29,17 +30,22 @@ function ProjectsPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col justify-between">
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-line bg-background/95 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-[1320px] items-center justify-between px-6">
-          <a href="/" className="text-xl font-black tracking-tight text-brand">
-            LEENUS<span className="text-brand-red">.</span>
-            <span className="ml-1 text-xs font-bold tracking-widest uppercase text-body">
-              India
-            </span>
+        <div className="mx-auto flex h-20 max-w-[1320px] items-center justify-between px-6">
+          <a
+            href="/"
+            id="header-logo-link"
+            className="flex items-center py-1 group transition-opacity hover:opacity-90"
+          >
+            <img
+              src={logoImage}
+              alt="Leenus India"
+              className="h-12 sm:h-14 md:h-16 w-auto max-w-[220px] sm:max-w-[280px] object-contain"
+            />
           </a>
           <a
             href="#contact"
             onClick={() => track("request_pricing_clicked", { source: "header" })}
-            className="pill-cta bg-brand-red text-primary-foreground hover:bg-brand-red/90 text-xs sm:text-sm py-2 px-5 ml-auto"
+            className="pill-cta bg-brand-red text-primary-foreground hover:bg-brand-red/90 text-xs sm:text-sm py-2.5 px-6 ml-auto shadow-sm"
           >
             Request Pricing
           </a>
@@ -111,10 +117,20 @@ function ProjectsPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-line py-8 bg-surface/50">
-        <div className="mx-auto flex max-w-[1320px] flex-wrap items-center justify-between gap-4 px-6 text-xs sm:text-sm text-muted-foreground">
-          <p className="font-bold text-brand tracking-wider">LEENUS INDIA</p>
-          <p>
+      <footer className="border-t border-line py-10 bg-surface/60">
+        <div className="mx-auto flex max-w-[1320px] flex-col sm:flex-row items-center justify-between gap-6 px-6 text-xs sm:text-sm text-muted-foreground">
+          <a
+            href="/"
+            id="footer-logo-link"
+            className="flex items-center group transition-opacity hover:opacity-90"
+          >
+            <img
+              src={logoImage}
+              alt="Leenus India"
+              className="h-11 sm:h-13 md:h-14 w-auto max-w-[220px] sm:max-w-[260px] object-contain"
+            />
+          </a>
+          <p className="text-center sm:text-right font-medium text-body">
             Water · Sewer · Stormwater · Electrical Infrastructure — Telangana &amp; Andhra Pradesh
           </p>
         </div>

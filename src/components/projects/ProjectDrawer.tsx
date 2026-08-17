@@ -58,6 +58,7 @@ export function ProjectDrawer({ project, districtLabel, onClose }: Props) {
             <Row label="District" value={districtLabel} />
             <Row label="City / Village" value={toTitleCase(project.locality)} />
             <Row label="Services" value={project.services.join(" · ")} />
+            {project.scope ? <Row label="Product / Scope" value={project.scope} /> : null}
             <Row
               label={project.status === "Completed" ? "Completion" : "Target completion"}
               value={project.completionDate}

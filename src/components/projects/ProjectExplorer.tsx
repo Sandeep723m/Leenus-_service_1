@@ -23,7 +23,6 @@ export function ProjectExplorer() {
   const [selected, setSelected] = useState<string | null>(topDistrict("telangana"));
   const [status, setStatus] = useState<StatusFilter>("All");
   const [open, setOpen] = useState<Project | null>(null);
-  const [fading, setFading] = useState(false);
 
   const active = STATES.find((s) => s.slug === state)!;
   const counts = useMemo(() => districtCounts(state), [state]);
@@ -48,13 +47,12 @@ export function ProjectExplorer() {
   const switchState = (slug: StateSlug) => {
     if (slug === state) return;
     track("state_selected", { state: slug });
-    setFading(true);
-    window.setTimeout(() => {
-      setState(slug);
-      setSelected(topDistrict(slug));
-      setStatus("All");
-      setFading(false);
-    }, 220);
+    // Keep the selection and its dependent data in one synchronous transition.
+    // A delayed update allowed rapid state changes to apply stale districts.
+    setState(slug);
+    setSelected(topDistrict(slug));
+    setStatus("All");
+    setOpen(null);
   };
 
   const selectDistrict = (district: string) => {
@@ -86,8 +84,7 @@ export function ProjectExplorer() {
       <div className="grid gap-8 text-left lg:grid-cols-[55fr_45fr] lg:gap-10 items-stretch">
         <div
           className={cn(
-            "transition-all duration-300 ease-out bg-surface/50 rounded-2xl p-3 sm:p-4 border border-line/70 shadow-sm flex flex-col justify-between h-[620px] sm:h-[680px] lg:h-[720px]",
-            fading ? "scale-[0.97] opacity-0" : "scale-100 opacity-100",
+            "bg-surface/50 rounded-2xl p-3 sm:p-4 border border-line/70 shadow-sm flex flex-col justify-between h-[620px] sm:h-[680px] lg:h-[720px]",
           )}
         >
           <div className="flex-1 w-full h-full min-h-0 overflow-hidden rounded-xl">
@@ -154,7 +151,7 @@ export function ProjectExplorer() {
                     </div>
 
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {(["All", "Completed", "Ongoing"] as StatusFilter[]).map((s) => (
+                      {(["All", "Completed", "Ongoing", "Temporarily Paused"] as StatusFilter[]).map((s) => (
                         <button
                           key={s}
                           onClick={() => setStatus(s)}

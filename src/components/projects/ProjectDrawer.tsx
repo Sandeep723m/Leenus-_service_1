@@ -1,5 +1,5 @@
 import { ArrowUpRight, X } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import type { Project } from "@/data/projects";
 import { track } from "@/lib/analytics";
 import { toTitleCase } from "@/lib/utils";
@@ -12,12 +12,43 @@ type Props = {
 };
 
 export function ProjectDrawer({ project, districtLabel, onClose }: Props) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
   useEffect(() => {
     if (!project) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeButtonRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onCloseRef.current();
+        return;
+      }
+
+      if (e.key !== "Tab") return;
+      const dialog = closeButtonRef.current?.closest("[role='dialog']");
+      const focusable = dialog?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable?.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [project, onClose]);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      previouslyFocused?.focus();
+    };
+  }, [project]);
 
   if (!project) return null;
 
@@ -42,6 +73,7 @@ export function ProjectDrawer({ project, districtLabel, onClose }: Props) {
             </h3>
           </div>
           <button
+            ref={closeButtonRef}
             onClick={onClose}
             aria-label="Close project details"
             className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
@@ -92,7 +124,7 @@ export function ProjectDrawer({ project, districtLabel, onClose }: Props) {
               track("request_pricing_clicked", { source: "project_drawer" });
               onClose();
             }}
-            className="pill-cta w-full bg-brand-red text-primary-foreground hover:bg-brand-red/90"
+            className="pill-cta w-full bg-brand-red px-8 py-3 text-base text-primary-foreground hover:bg-brand-red/90"
           >
             Discuss a Project
           </a>

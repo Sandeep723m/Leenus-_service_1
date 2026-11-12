@@ -57,7 +57,7 @@ export function DistrictMap({
 
   // Dragging / Panning handlers
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button !== 0) return;
+    if (e.button !== 0 || zoom <= 1) return;
     setIsDragging(true);
     setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
   };
